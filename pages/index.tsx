@@ -10,7 +10,7 @@ export default function IndexPage() {
       </div>
       <div className="flex flex-col items-center">
         <h1 className="text-lg font-bold">
-          Bridge ETH from Goerli to Base Goerli
+          Bridge ETH from Sepolia to Base Sepolia
         </h1>
         <Bridge />
       </div>

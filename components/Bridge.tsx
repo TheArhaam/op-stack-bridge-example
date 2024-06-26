@@ -8,8 +8,8 @@ enum TxStatus {
   Confirmed,
 }
 
-const L1_EXPLORER_URL = "https://goerli.etherscan.io/";
-const L2_EXPLORER_URL = "https://goerli.basescan.org";
+const L1_EXPLORER_URL = "https://sepolia.etherscan.io/";
+const L2_EXPLORER_URL = "https://sepolia.basescan.org";
 
 export default function Bridge() {
   const { address, isConnected } = useAccount();
@@ -32,11 +32,11 @@ export default function Bridge() {
   const messenger = useMemo(() => {
     if (!signer || !address) return;
     const l2Provider = new ethers.providers.JsonRpcProvider(
-      "https://goerli.base.org",
+      "https://sepolia.base.org",
     ).getSigner(address);
     return new OP.CrossChainMessenger({
-      l1ChainId: OP.L1ChainID.GOERLI,
-      l2ChainId: OP.L2ChainID.BASE_GOERLI,
+      l1ChainId: OP.L1ChainID.SEPOLIA,
+      l2ChainId: OP.L2ChainID.BASE_SEPOLIA,
       l1SignerOrProvider: signer,
       l2SignerOrProvider: l2Provider,
     });

@@ -1,15 +1,15 @@
-import { createClient, configureChains, goerli } from "wagmi";
+import { createClient, configureChains, sepolia } from "wagmi";
 import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 
-const RPC_URL = "https://rpc.eth.gateway.fm";
+// const RPC_URL = "https://rpc.eth.gateway.fm";
 
 const { provider, chains, webSocketProvider } = configureChains(
-  [goerli],
+  [sepolia],
   [
     jsonRpcProvider({
       rpc: (_) => ({
-        http: RPC_URL,
+        http: sepolia.rpcUrls.public.http[0],
       }),
     }),
   ],
