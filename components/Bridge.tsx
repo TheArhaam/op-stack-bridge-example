@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { useAccount, useSigner } from "wagmi";
+import { useAccount } from "wagmi";
 import * as OP from "@eth-optimism/sdk";
 import { ethers } from "ethers";
+import { useEthersSigner } from "../lib/ethers";
 
 enum TxStatus {
   Pending,
@@ -14,7 +15,7 @@ const L2_EXPLORER_URL = "https://sepolia.basescan.org";
 export default function Bridge() {
   const { address, isConnected } = useAccount();
   const [showConnectMessage, setShowConnectMessage] = useState<boolean>(false);
-  const { data: signer } = useSigner();
+  const signer = useEthersSigner();
   const [l1TxHash, setL1TxHash] = useState<string>("");
   const [l1TxStatus, setL1TxStatus] = useState<TxStatus | null>(null);
   const [l2TxHash, setL2TxHash] = useState<string>("");
@@ -45,6 +46,7 @@ export default function Bridge() {
   // adapted from https://github.com/ethereum-optimism/optimism-tutorial/tree/main/cross-dom-bridge-eth
   const bridge = useCallback(async () => {
     try {
+      if (!messenger) return;
       setBridgeInProgress(true);
       // bridging 1 wei
       const response = await messenger.depositETH(1);
@@ -76,15 +78,15 @@ export default function Bridge() {
 
   // effect to poll for message status
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: NodeJS.Timeout | undefined = undefined;
 
     const getMessageStatusAsync = async () => {
-      if (!bridgeInProgress) return;
+      if (!messenger || !bridgeInProgress) return;
       try {
         const status = await messenger.getMessageStatus(
           l1TxHash,
           0, // message index, 0 unless multicall
-          l2StartBlockNumber,
+          l2StartBlockNumber as number,
         );
         setMessageStatus(status);
       } catch (e) {
@@ -113,7 +115,7 @@ export default function Bridge() {
 
   // effect for timer
   useEffect(() => {
-    let timerIntervalId: NodeJS.Timeout;
+    let timerIntervalId: NodeJS.Timeout | undefined = undefined;
 
     if (
       bridgeInProgress &&
@@ -163,7 +165,11 @@ export default function Bridge() {
           </button>
         )}
         {l1TxHash && (
-          <TxInfo isL1={true} txHash={l1TxHash} txStatus={l1TxStatus} />
+          <TxInfo
+            isL1={true}
+            txHash={l1TxHash}
+            txStatus={l1TxStatus as TxStatus}
+          />
         )}
         {estimatedWaitTime > 0 && (
           <p>
@@ -175,7 +181,11 @@ export default function Bridge() {
           <p> L2 message status: {humanMessageStatus(messageStatus)} </p>
         )}
         {l2TxHash && (
-          <TxInfo isL1={false} txHash={l2TxHash} txStatus={l2TxStatus} />
+          <TxInfo
+            isL1={false}
+            txHash={l2TxHash}
+            txStatus={l2TxStatus as TxStatus}
+          />
         )}
       </div>
     </div>

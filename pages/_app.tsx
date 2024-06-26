@@ -1,19 +1,22 @@
-import React from "react";
-import { WagmiConfig } from "wagmi";
-import { sepolia } from "wagmi/chains";
+import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { client } from "../lib/wagmi";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { config } from "../lib/wagmi";
 import "@rainbow-me/rainbowkit/styles.css";
 import "../styles.css";
 import { AppProps } from "next/app";
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <WagmiConfig client={client}>
-      <RainbowKitProvider chains={[sepolia]}>
-        <Component {...pageProps} />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <Component {...pageProps} />
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 
