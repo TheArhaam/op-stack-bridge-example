@@ -8,7 +8,7 @@
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore . "
   },
   "dependencies": {
-    "@eth-optimism/sdk": "^3.1.0",
+    "@eth-optimism/sdk": "^3.3.2",
     "@rainbow-me/rainbowkit": "0.12.18",
     "autoprefixer": "^10.4.14",
     "next": "latest",
