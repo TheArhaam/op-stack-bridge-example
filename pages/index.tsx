@@ -1,6 +1,7 @@
 import React from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Bridge from "../components/Bridge";
+// import Bridge from "../components/Bridge";
+import BridgeV2 from "../components/BridgeV2";
 
 export default function IndexPage() {
   return (
@@ -9,10 +10,7 @@ export default function IndexPage() {
         <ConnectButton showBalance={false} />
       </div>
       <div className="flex flex-col items-center">
-        <h1 className="text-lg font-bold">
-          Bridge ETH from Sepolia to Base Sepolia
-        </h1>
-        <Bridge />
+        <BridgeV2 />
       </div>
     </div>
   );
